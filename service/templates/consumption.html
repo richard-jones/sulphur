@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style type="text/css">
+
+#country-year {
+    height: 750px;
+    width: 100%;
+}
+#country-year .reportview {
+    height: 700px;
+}
+
+</style>
+
+<h1 style="margin-bottom: 30px">Consumption by Country by Year</h1>
+<div class="row-fluid">
+    <div class="span12">
+        <input type='text' name='country' id='ac_country' style='width: 100%;'>
+    </div>
+</div>
+<div class="row-fluid">
+    <div class="span9">
+        <div id="country-year-container">
+            <div class="row-fluid">
+                <div class="span12">
+                    <div id="country-year">
+                        <strong>Start by choosing some countries in the box above</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block extra_js_bottom %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/consumption.reportview.js') }}"></script>
+{% endblock%}

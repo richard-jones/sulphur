@@ -26,11 +26,18 @@ QUERY_ROUTE = {
             "role" : None,                      # if authenticated, what role is required to access the query endpoint
             "filters" : [],                     # names of the standard filters to apply to the query
             "dao" : "service.dao.ProductionDAO"       # classpath for DAO which accesses the underlying ES index
+        },
+        "consumption" : {                     # the URL name for the index type being queried
+            "auth" : False,                     # whether the route requires authentication
+            "role" : None,                      # if authenticated, what role is required to access the query endpoint
+            "filters" : [],                     # names of the standard filters to apply to the query
+            "dao" : "service.dao.ConsumptionDAO"       # classpath for DAO which accesses the underlying ES index
         }
     }
 }
 
 CLIENTJS_PROD_QUERY_ENDPOINT = "/query/prod"
+CLIENTJS_CONSUMPTION_QUERY_ENDPOINT = "/query/consumption"
 
 AUTOCOMPLETE_TERM = {
     "country" : {
@@ -41,7 +48,7 @@ AUTOCOMPLETE_TERM = {
             }
         },
         "facet" : "country.exact",
-        "input_filter" : lambda x : x,
+        "input_filter" : lambda x : x.strip().lower(),
         "default_size" : 10,
         "max_size" : 25,
         "dao" : "service.dao.ProductionDAO"

@@ -92,8 +92,7 @@ jQuery(document).ready(function($) {
                 "aggs": {
                     "by_country": {
                         "terms": {
-                            "field": "country.exact",
-                            "size": 3
+                            "field": "country.exact"
                         },
                         "aggs": {
                             "by_year": {
@@ -102,9 +101,9 @@ jQuery(document).ready(function($) {
                                     "size": 30
                                 },
                                 "aggs": {
-                                    "prod_stats": {
+                                    "con_stats": {
                                         "stats": {
-                                            "field": "production"
+                                            "field": "consumption"
                                         }
                                     }
                                 }
@@ -133,7 +132,7 @@ jQuery(document).ready(function($) {
                     var years = country.by_year.buckets;
                     for (var j = 0; j < years.length; j++) {
                         var year = years[j];
-                        series.values.push({label: year.key, value: year.prod_stats.sum})
+                        series.values.push({label: year.key, value: year.con_stats.sum})
                     }
                     data_series.push(series);
                 }
@@ -144,7 +143,7 @@ jQuery(document).ready(function($) {
 
             doElasticSearchQuery({
                 success: convertToDataSeries,
-                search_url: octopus.config.prod_query_endpoint,
+                search_url: octopus.config.consumption_query_endpoint,
                 queryobj: query,
                 datatype: "jsonp"
             })

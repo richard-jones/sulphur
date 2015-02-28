@@ -28,6 +28,14 @@ from octopus.lib.webapp import custom_static
 def root():
     return render_template("index.html")
 
+@app.route("/production")
+def production():
+    return render_template("production.html")
+
+@app.route("/consumption")
+def consumption():
+    return render_template("consumption.html")
+
 # this allows us to override the standard static file handling with our own dynamic version
 @app.route("/static/<path:filename>")
 def static(filename):
