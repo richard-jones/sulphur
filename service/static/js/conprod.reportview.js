@@ -4,6 +4,7 @@ jQuery(document).ready(function($) {
      * Application Reportview Theme
      *****************************
      */
+
     function customReportViewClosure(height) {
         function theReportview(options) {
             /*****************************************
@@ -40,30 +41,42 @@ jQuery(document).ready(function($) {
             return;
         }
 
+        // get the start and end years of the report
+        var from = $("#from").select2("val");
+        var to = $("#to").select2("val");
+
         function dataSeriesFunction(callback) {
             var query = {
-                "query": {
-                    // "match_all" : {}
-                    // "terms" : {"country.exact" : ["Bolivia"]}
+                "query" : {
+                    "bool" : {
+                        "must" : [
+                            {
+                                "range" : {
+                                    "year" : {
+                                        "gte" : from,
+                                        "lte" : to
+                                    }
+                                }
+                            },
+                            filter
+                        ]
+                    }
                 },
-                "size": 0,
+                "size" : 0,
                 "aggs": {
                     "by_country": {
                         "terms": {
                             "field": "country.exact"
                         },
                         "aggs": {
-                            "by_year": {
-                                "terms": {
-                                    "field": "year",
-                                    "size": 30
-                                },
-                                "aggs": {
-                                    "con_stats": {
-                                        "stats": {
-                                            "field": "consumption"
-                                        }
-                                    }
+                            "con": {
+                                "sum": {
+                                    "field": "consumption"
+                                }
+                            },
+                            "prod": {
+                                "sum": {
+                                    "field": "production"
                                 }
                             }
                         }
@@ -71,37 +84,28 @@ jQuery(document).ready(function($) {
                 }
             };
 
-            if (filter) {
-                query.query = filter;
-            } else {
-                query.query = {match_all: {}}
-            }
-
             function convertToDataSeries(rawdata, results) {
-                // for each facet, get the results and add them to the options
-                var data_series = [];
+
+                var prod_series = {key : "Production", values : []};
+                var con_series = {key : "Consumption", values : []};
 
                 var countries = rawdata.aggregations.by_country.buckets;
                 for (var i = 0; i < countries.length; i++) {
-                    var series = {};
                     var country = countries[i];
-                    series["key"] = country["key"];
-                    series["values"] = [];
-                    var years = country.by_year.buckets;
-                    for (var j = 0; j < years.length; j++) {
-                        var year = years[j];
-                        series.values.push({label: year.key, value: year.con_stats.sum})
-                    }
-                    data_series.push(series);
+                    var country_name = country.key;
+                    var production = country.prod.value;
+                    var consumption = country.con.value;
+                    prod_series.values.push({label : country_name, value: production});
+                    con_series.values.push({label : country_name, value: consumption});
                 }
 
                 // finally, hit the callback
-                callback(data_series)
+                callback([prod_series, con_series])
             }
 
             doElasticSearchQuery({
                 success: convertToDataSeries,
-                search_url: octopus.config.consumption_query_endpoint,
+                search_url: octopus.config.conprod_query_endpoint,
                 queryobj: query,
                 datatype: "jsonp"
             })
@@ -149,6 +153,24 @@ jQuery(document).ready(function($) {
         allow_clear : true,
         multiple: true
     });
+
+    // sort out the options to appear in each select box
+    var options = "";
+    for (var i = 2008; i <= 2030; i++) {
+        options += '<option value="' + i + '">' + i + '</option>'
+    }
+
+    $("#from").html(options)
+        .select2()
+        .change(function (event) {
+            updateReport()
+        });
+
+    $("#to").html(options)
+        .select2()
+        .change(function (event) {
+            updateReport()
+        });
 
     $("#ac_country").change(function (event) {
         updateReport()

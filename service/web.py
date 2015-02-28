@@ -36,6 +36,10 @@ def production():
 def consumption():
     return render_template("consumption.html")
 
+@app.route("/conprod")
+def conprod():
+    return render_template("conprod.html")
+
 # this allows us to override the standard static file handling with our own dynamic version
 @app.route("/static/<path:filename>")
 def static(filename):

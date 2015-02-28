@@ -32,12 +32,19 @@ QUERY_ROUTE = {
             "role" : None,                      # if authenticated, what role is required to access the query endpoint
             "filters" : [],                     # names of the standard filters to apply to the query
             "dao" : "service.dao.ConsumptionDAO"       # classpath for DAO which accesses the underlying ES index
+        },
+        "conprod" : {                     # the URL name for the index type being queried
+            "auth" : False,                     # whether the route requires authentication
+            "role" : None,                      # if authenticated, what role is required to access the query endpoint
+            "filters" : [],                     # names of the standard filters to apply to the query
+            "dao" : "service.dao.ConProdDAO"       # classpath for DAO which accesses the underlying ES index
         }
     }
 }
 
 CLIENTJS_PROD_QUERY_ENDPOINT = "/query/prod"
 CLIENTJS_CONSUMPTION_QUERY_ENDPOINT = "/query/consumption"
+CLIENTJS_CONPROD_QUERY_ENDPOINT = "/query/conprod"
 
 AUTOCOMPLETE_TERM = {
     "country" : {

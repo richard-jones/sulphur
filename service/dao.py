@@ -9,3 +9,6 @@ class ConsumptionDAO(dao.ESDAO):
 
 class TradeDAO(dao.ESDAO):
     __type__ = 'trade'
+
+class ConProdDAO(dao.ESDAO):
+    __type__ = "production,consumption"

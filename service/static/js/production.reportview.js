@@ -5,47 +5,6 @@ jQuery(document).ready(function($) {
      *****************************
      */
 
-    // facetview instance for control
-
-    function customFrame(options) {
-        /*****************************************
-         * overrides must provide the following classes and ids
-         *
-         * id: facetview - main div in which the facetview functionality goes
-         * id: facetview_filters - div where the facet filters will be displayed
-         * id: facetview_rightcol - the main window for result display (doesn't have to be on the right)
-         * class: facetview_search_options_container - where the search bar and main controls will go
-         * id : facetview_selectedfilters - where we summarise the filters which have been selected
-         * class: facetview_metadata - where we want paging to go
-         * id: facetview_results - the table id for where the results actually go
-         * id: facetview_searching - where the loading notification can go
-         *
-         * Should respect the following configs
-         *
-         * options.debug - is this a debug enabled facetview.  If so, put a debug textarea somewhere
-         */
-
-        // the facet view object to be appended to the page
-        var thefacetview = '<div id="facetview">';
-
-        // provde the facets a place to go
-        thefacetview += '<div class="row-fluid"><div class="span12"><div id="facetview_filters" style="padding-top:15px;"></div></div></div>';
-
-        // insert loading notification
-        // thefacetview += '<div class="row-fluid"><div class="span12"><div class="facetview_searching" style="display:none"></div></div></div>'
-
-        // debug window near the bottom
-        if (options.debug) {
-            thefacetview += '<div class="row-fluid"><div class="span12"><div class="facetview_debug" style="display:none"><textarea style="width: 95%; height: 150px"></textarea></div></div></div>'
-        }
-
-        thefacetview += '<div style="display:none"><a href="#" class="facetview_force_search">refresh</a></div>';
-
-        // close off the big container and return
-        thefacetview += '</div>';
-        return thefacetview
-    }
-
     function customReportViewClosure(height) {
         function theReportview(options) {
             /*****************************************
@@ -192,10 +151,7 @@ jQuery(document).ready(function($) {
         multiple: true
     });
 
-    // $("#ac_institution").unbind("change");
     $("#ac_country").change(function (event) {
         updateReport()
     });
-
-    // updateReport();
 });
